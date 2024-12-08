@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Statement of Purpose Generator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            font-family: Georgia, serif;
+            border: box-border;
+        }
+
+        body {
+            padding: 20px;
+            background-color: rgba(128, 128, 128, 0.050);
+            overflow-x: hidden;
+        }
+
+        h1,
+        h2,
+        h3 {
+            text-align: center;
+            padding: 10px 0;
+        }
+
+        h3 {
+            margin-bottom: 15px;
+        }
+
+        #heading {
+            font-size: 2.5rem;
+        }
+
+        .outputSection {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .outputSection textarea {
+            margin: 20px;
+            height: 55vh;
+            border: 3px solid black;
+            border-radius: 10px;
+            font-size: 1.3rem;
+            padding: 20px;
+        }
+
+        .generateBtns {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+        }
+
+        .generateBtns button {
+            width: 40%;
+            margin: 10px 10px;
+            padding: 10px;
+            font-size: 1.5rem;
+            border: 3px solid black;
+            border-radius: 10px;
+            font-weight: bold;
+            background-color: #007bff;
+            color: #fff;
+            cursor: pointer;
+            transition: all 0.5s ease;
+
+            &:hover {
+                background-color: #0056b3;
+                box-shadow: 0 0 10px black;
+            }
+        }
+
+        #copyBtn {
+            margin: 10px 30%;
+            padding: 10px;
+            font-size: 1.5rem;
+            border: 3px solid black;
+            border-radius: 10px;
+            font-weight: bold;
+            background-color: #007bff;
+            color: #fff;
+            cursor: pointer;
+            transition: all 0.5s ease;
+
+            &:hover {
+                background-color: #0056b3;
+                box-shadow: 0 0 10px black;
+            }
+        }
+
+        .inputSection button {
+            margin: 0 42%;
+            padding: 10px 20px;
+            font-size: 1.5rem;
+            border: 3px solid black;
+            border-radius: 10px;
+            font-weight: bold;
+            background-color: #007bff;
+            color: #fff;
+            cursor: pointer;
+            transition: all 0.5s ease;
+
+            &:hover {
+                background-color: #0056b3;
+                box-shadow: 0 0 10px black;
+            }
+        }
+
+        section {
+            border: 3px solid black;
+            border-radius: 10px;
+            margin: 20px;
+        }
+
+        .Section-Content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .Section-Content div {
+            width: 100%;
+            margin: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        #personalDetails div {
+            margin: 10px;
+        }
+
+        label,
+        select {
+            margin-bottom: 10px;
+            font-size: 1.3rem;
+        }
+
+        select {
+            width: 100%;
+            font-size: 1.3rem;
+            border: 2px solid black;
+            border-radius: 5px;
+            box-shadow: 5px 5px 2px black;
+            margin: 10px 0 20px 0;
+            cursor: pointer;
+            transition: border-color 0.3s ease;
+
+            &:focus {
+                border-color: black;
+                outline: none;
+            }
+        }
+
+        input {
+            margin: 10px 0;
+            padding: 0 5px;
+            font-size: 1.3rem;
+            border: 2px solid black;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            transition: border-color 0.3s ease;
+
+            &:focus {
+                border-color: black;
+                outline: none;
+            }
+        }
+
+        .Acads-Work {
+            border: 3px solid black;
+            border-radius: 10px;
+            margin: 20px;
+            padding: 0 15px;
+            height: 450px;
+        }
+
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            display: none;
+        }
+
+        .loading-overlay h1 {
+            margin-top: 18%;
+            font-size: 2.5rem;
+        }
+
+        .spinner {
+            border: 20px solid #f3f3f3;
+            border-top: 20px solid #007bff;
+            border-radius: 50%;
+            width: 150px;
+            height: 150px;
+            position: absolute;
+            top: 35%;
+            left: 43%;
+            transform: translate(-50%, -50%);
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+</head>
+
+<body id="top">
+
+    <h1 id="heading"><u>Statement of Purpose Generator</u></h1>
+
+    <div class="outputSection" style="display: none;">
+        <textarea id="response" readonly></textarea>
+        <button id="copyBtn">Copy to Clipboard</button>
+        <div class="generateBtns">
+            <button id="reGenBtn">Want To Regenerate</button>
+            <button id="downloadSOPBtn">Download The SOP</button>
+            <button id="resetBtn">Want To Generate Another SOP</button>
+        </div>
+    </div>
+
+    <div class="inputSection">
+        <section id="CourseDetails">
+            <h2>Course Details</h2>
+            <div class="Section-Content">
+                <div>
+                    <label for="stuName">Desired Country To Apply:</label>
+                    <input type="text" id="stuDestination" placeholder="Enter Your Country Name">
+                </div>
+                <div>
+                    <label for="courseType">Select Desired Course Type:</label>
+                    <select id="courseType">
+                        <option value="All Course Types">All Course Types</option>
+                        <option value="Undergraduate">Undergraduate</option>
+                        <option value="Postgraduate">Postgraduate</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="university">Desired University To Apply:</label>
+                    <input type="text" id="university" placeholder="Enter Your University Name">
+                </div>
+                <div>
+                    <label for="course">Desired Course To Apply:</label>
+                    <input type="text" id="course" placeholder="Enter Your Course Name">
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h2>Student's Personal Details</h2>
+            <div class="Section-Content" id="personalDetails">
+                <div>
+                    <label for="stuName">Student's Name:</label>
+                    <input type="text" id="stuName" placeholder="Enter Your Full Name">
+                </div>
+                <div>
+                    <label for="stuCountry">Student's Country of Residence:</label>
+                    <input type="text" id="stuCountry" placeholder="Enter Country Name">
+                </div>
+                <div>
+                    <label for="stuState">Student's State of Residence:</label>
+                    <input type="text" id="stuState" placeholder="Enter State Name">
+                </div>
+                <div>
+                    <label for="stuCity">Student's City of Residence:</label>
+                    <input type="text" id="stuCity" placeholder="Enter City Name">
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h2>Student's Academic Details and Work Experience</h2>
+            <div class="Section-Content">
+                <div class="Acads-Work">
+                    <h3>Higher Secondary Education Details</h3>
+                    <label for="stuBoard">Attended Board Name:</label>
+                    <input type="text" id="stuBoard" placeholder="Enter Your Board Name">
+                    <label for="stu12Year">Year of Passing:</label>
+                    <input type="text" id="stu12Year" placeholder="Enter Your Year of Passing">
+                    <label for="stu12Marks">Enter Marks:</label>
+                    <input type="text" id="stu12Marks" placeholder="Enter Your Marks">
+                </div>
+                <div class="Acads-Work">
+                    <h3>Undergraduate Details</h3>
+                    <label for="stuUGDegree">Enter Degree Title:</label>
+                    <input type="text" id="stuUGDegree" placeholder="Enter Your Degree Title">
+                    <label for="stuUni">Attended University Name:</label>
+                    <input type="text" id="stuUni" placeholder="Enter Your University Name">
+                    <label for="stuUGYear">Year of Passing:</label>
+                    <input type="text" id="stuUGYear" placeholder="Enter Passing Year or, NA If Pursuing">
+                    <label for="stuUGMarks">Enter Marks:</label>
+                    <input type="text" id="stuUGMarks" placeholder="Enter Your Marks or, Pursuing">
+                </div>
+                <div class="Acads-Work">
+                    <h3>Work Experience Details</h3>
+                    <label for="stuJobTitle">Enter Job Title:</label>
+                    <input type="text" id="stuJobTitle" placeholder="Enter Your Job Title">
+                    <label for="stuJobCompany">Enter Company/Organisation Name:</label>
+                    <input type="text" id="stuJobCompany" placeholder="Enter Your Company Name">
+                    <label for="stuJobStartDate">Enter Joining Date:</label>
+                    <input type="text" id="stuJobStartDate" placeholder="DD/MM/YYYY">
+                    <label for="stuJobEndDate">Enter Releasing Date:</label>
+                    <input type="text" id="stuJobEndDate" placeholder="DD/MM/YYYY or, Till Date">
+                </div>
+            </div>
+        </section>
+
+        <a href="#top"><button id="sendBtn">Generate SOP</button></a>
+
+        <div class="loading-overlay" id="loadingOverlay">
+            <div class="spinner"></div>
+            <h1></h1>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script>
+        // For Input Purpose
+        const stuDestination = document.getElementById('stuDestination');
+        const courseType = document.getElementById('courseType');
+        const university = document.getElementById('university');
+        const course = document.getElementById('course');
+        const stuName = document.getElementById('stuName');
+        const stuCountry = document.getElementById('stuCountry');
+        const stuState = document.getElementById('stuState');
+        const stuCity = document.getElementById('stuCity');
+        const stuBoard = document.getElementById('stuBoard');
+        const stu12Year = document.getElementById('stu12Year');
+        const stu12Marks = document.getElementById('stu12Marks');
+        const stuUGDegree = document.getElementById('stuUGDegree');
+        const stuUni = document.getElementById('stuUni');
+        const stuUGYear = document.getElementById('stuUGYear');
+        const stuUGMarks = document.getElementById('stuUGMarks');
+        const stuJobTitle = document.getElementById('stuJobTitle');
+        const stuJobCompany = document.getElementById('stuJobCompany');
+        const stuJobStartDate = document.getElementById('stuJobStartDate');
+        const stuJobEndDate = document.getElementById('stuJobEndDate');
+
+        // For Output Purpose
+        const response = document.getElementById('response');
+        const waitingMSG = document.querySelector('.loading-overlay h1');
+        const copyBtn = document.getElementById('copyBtn');
+        const reGenBtn = document.getElementById('reGenBtn');
+        const downloadSOPBtn = document.getElementById('downloadSOPBtn');
+        const resetBtn = document.getElementById('resetBtn');
+        const sendBtn = document.getElementById('sendBtn');
+        const outputSection = document.querySelector('.outputSection');
+
+        function showLoadingOverlay() {
+            document.getElementById('loadingOverlay').style.display = 'flex';
+        }
+
+        function hideLoadingOverlay() {
+            document.getElementById('loadingOverlay').style.display = 'none';
+        }
+
+        async function generateSOP() {
+            const ugMessage = `Please write a detailed unique Statement of purpose in 2000 words from the student's point of view for admission considering the educational background and other personal details with the proper headings and 3 points of all the reasons.
+
+Introduction (Within 100 Words)
+Educational Background (Within 100 Words)
+Why the ${stuDestination.value} for higher studies (Within 250 Words with a long - 100 Words intro and 3 points)
+Why Not ${stuCountry.value} for higher studies (Within 250 Words with a long - 100 Words intro and 3 points)
+Why ${university.value} (Within 250 Words with a long - 100 Words intro and 3 points)
+Why ${course.value} (Within 250 Words with a long - 100 Words intro and 3 points based on previous study)
+Future Opportunities (Within 250 Words)
+
+
+Key Inputs: 
+
+Personal Details: 
+
+Student Name : ${stuName.value}
+Address : ${stuCity.value},${stuState.value},${stuCountry.value}
+
+
+           
+Education Qualification Details:
+
+Higher Secondary Education Details:
+Board Name : ${stuBoard.value}
+Year of passing : ${stu12Year.value}
+Marks : ${stu12Marks.value}
+
+Work Experience:
+Job Title : ${stuJobTitle.value === "" ? "Not Applicable" : stuJobTitle.value}
+Organisation Name : ${stuJobCompany.value === "" ? "Not Applicable" : stuJobCompany.value}
+Duration of Work : ${stuJobStartDate.value === "" ? "Not Applicable" : stuJobStartDate.value} To ${stuJobEndDate.value === "" ? "Not Applicable" : stuJobEndDate.value}
+
+Note: Kindly ignore those fields if it is filled with “Not Applicable”. Please don’t use any signs like “*” or, "#" in the headings to make it bold or underlined, write the whole SOP in normal text and it is important to not use those signs.`;
+
+            const pgMessage = `Please write a detailed unique Statement of purpose in 2000 words from the student's point of view for admission considering the educational background and other personal details with the proper headings and 3 points of all the reasons.
+
+                Introduction (Within 100 Words)
+Educational Background (Within 100 Words)
+Why the ${stuDestination.value} for higher studies (Within 250 Words with a long - 100 Words intro and 3 points)
+Why Not ${stuCountry.value} for higher studies (Within 250 Words with a long - 100 Words intro and 3 points)
+Why ${university.value} (Within 250 Words with a long - 100 Words intro and 3 points)
+Why ${course.value} (Within 250 Words with a long - 100 Words intro and 3 points based on previous study)
+Future Opportunities (Within 250 Words)
+
+
+Key Inputs: 
+
+Personal Details: 
+
+Student Name : ${stuName.value}
+Address : ${stuCity.value},${stuState.value},${stuCountry.value}
+
+
+           
+Education Qualification Details:
+
+Higher Secondary Education Details:
+Board Name : ${stuBoard.value}
+Year of passing : ${stu12Year.value}
+Marks : ${stu12Marks.value}
+
+Undergraduate Education Details:
+Degree : ${stuUGDegree.value}
+Degree Institution Name : ${stuUni.value}
+Year of passing : ${stuUGYear.value}
+Marks : ${stuUGMarks.value}
+
+Work Experience:
+Job Title : ${stuJobTitle.value === "" ? "Not Applicable" : stuJobTitle.value}
+Organisation Name : ${stuJobCompany.value === "" ? "Not Applicable" : stuJobCompany.value}
+Duration of Work : ${stuJobStartDate.value === "" ? "Not Applicable" : stuJobStartDate.value} To ${stuJobEndDate.value === "" ? "Not Applicable" : stuJobEndDate.value}
+
+Note: Kindly ignore those fields if it is filled with “Not Applicable”. Please don’t use any signs like “*” or, "#" in the headings to make it bold or underlined, write the whole SOP in normal text and it is important to not use those signs.`
+
+            document.getElementById('response').value = "";
+
+            waitingMSG.innerHTML = `ChatGPT Is Writting The SOP For <u><i>${stuName.value}</i></u>`;
+            showLoadingOverlay();
+
+            const response = await fetch('/chatgpt', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    message: courseType.value === 'Undergraduate' ? ugMessage : pgMessage
+                }),
+            });
+
+            outputSection.style.display = "flex";
+            hideLoadingOverlay();
+
+            const data = await response.json();
+
+            document.getElementById('response').value = data;
+        };
+
+        sendBtn.addEventListener('click', generateSOP);
+        reGenBtn.addEventListener('click', generateSOP);
+
+        copyBtn.addEventListener('click', () => {
+            const responseText = response.value;
+
+            navigator.clipboard.writeText(responseText).then(() => {
+                alert("Copied to clipboard!");
+            }).catch(err => {
+                console.error('Failed to copy text: ', err);
+            });
+        });
+
+        async function downloadSOP() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+
+            const sopContent = document.getElementById('response').value;
+
+            const margin = 10;
+            const pageWidth = doc.internal.pageSize.width;
+            const pageHeight = doc.internal.pageSize.height;
+            const borderWidth = pageWidth - 2 * margin;
+            const borderHeight = 277;
+
+            const addTextWithBorder = (text) => {
+                const wrappedText = doc.splitTextToSize(text, borderWidth - 10);
+
+                let yOffset = margin + 10;
+                const maxHeight = margin + borderHeight;
+                const lineHeight = 7;
+
+                for (let i = 0; i < wrappedText.length; i++) {
+                    if (yOffset + lineHeight > maxHeight) {
+                        doc.addPage();
+                        yOffset = margin + 10;
+                    }
+
+                    doc.rect(margin, margin, borderWidth, borderHeight);
+                    doc.text(wrappedText[i], margin + 5, yOffset);
+                    yOffset += lineHeight;
+                }
+            };
+
+            addTextWithBorder(sopContent);
+
+            doc.save(`${stuName.value} SOP.pdf`);
+        }
+
+        downloadSOPBtn.addEventListener('click', downloadSOP);
+
+        resetBtn.addEventListener('click', () => {
+            response.value = '';
+            outputSection.style.display = "none";
+            stuDestination.value = '';
+            courseType.value = 'All Course Types';
+            university.value = '';
+            course.value = '';
+            stuName.value = '';
+            stuCountry.value = '';
+            stuState.value = '';
+            stuCity.value = '';
+            stuBoard.value = '';
+            stu12Year.value = '';
+            stu12Marks.value = '';
+            stuUGDegree.value = '';
+            stuUni.value = '';
+            stuUGYear.value = '';
+            stuUGMarks.value = '';
+            stuJobTitle.value = '';
+            stuJobCompany.value = '';
+            stuJobStartDate.value = '';
+            stuJobEndDate.value = '';
+        })
+    </script>
+</body>
+
+</html>
